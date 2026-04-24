@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataVivienda - Captura</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="contenedor-app">
+        
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-border-all"></i>
+                <h2>DataVivienda</h2>
+            </div>
+            <nav class="menu">
+                <a href="#" class="menu-item activo"><i class="fa-solid fa-plus"></i> Captura</a>
+                <a href="#" class="menu-item"><i class="fa-solid fa-arrow-up-from-bracket"></i> Importar</a>
+                <a href="#" class="menu-item"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="#" class="menu-item"><i class="fa-regular fa-clipboard"></i> Registros</a>
+            </nav>
+        </aside>
+
+        <main class="contenido-principal">
+            <header>
+                <h1>Módulo de Captura</h1>
+                <p>Ingresa la información del nuevo desarrollo.</p>
+            </header>
+            
+            <div class="panel-contenido">
+                <form id="formularioCaptura" class="formulario-grid">
+                    
+                    <div class="grupo-input">
+                        <label>Tipología</label>
+                        <select name="tipologia" required>
+                            <option value="">Selecciona...</option>
+                            <option value="Casa">Casa</option>
+                            <option value="Departamento">Departamento</option>
+                        </select>
+                    </div>
+                    <div class="grupo-input">
+                        <label>Municipio</label>
+                        <input type="text" name="municipio" value="Tijuana" required>
+                    </div>
+                    <div class="grupo-input">
+                        <label>Segmento</label>
+                        <input type="text" name="segmento" placeholder="Ej. Medio Residencial">
+                    </div>
+                    <div class="grupo-input">
+                        <label>Desarrollador</label>
+                        <input type="text" name="desarrollador" placeholder="Ej. Ruba">
+                    </div>
+                    <div class="grupo-input">
+                        <label>Fraccionamiento</label>
+                        <input type="text" name="fraccionamiento" required>
+                    </div>
+                    <div class="grupo-input">
+                        <label>Estatus</label>
+                        <select name="estatus">
+                            <option value="ACTIVO">Activo</option>
+                            <option value="PAUSA">Pausa</option>
+                            <option value="INACTIVO">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Precio de Lista ($)</label>
+                        <input type="number" name="precio_lista" step="0.01">
+                    </div>
+                    <div class="grupo-input">
+                        <label>M2 Construidos</label>
+                        <input type="number" name="m2_construidos" step="0.01">
+                    </div>
+                    <div class="grupo-input">
+                        <label>Habitaciones</label>
+                        <input type="number" name="recamaras">
+                    </div>
+                    <div class="grupo-input">
+                        <label>Baños</label>
+                        <input type="number" name="banos" step="0.5">
+                    </div>
+
+                    <div class="grupo-boton">
+                        <button type="submit" class="btn-guardar"><i class="fa-solid fa-save"></i> Guardar Registro</button>
+                    </div>
+
+                </form>
+                <div id="mensajeAlerta" class="alerta oculta"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
