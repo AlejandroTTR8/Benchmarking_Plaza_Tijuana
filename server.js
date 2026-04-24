@@ -32,7 +32,7 @@ app.post('/api/capturas', async (req, res) => {
 
     const query = `
       INSERT INTO capturas (
-        tipologia, municipio, segmento, desarrollador, fraccionamiento, 
+        tipologia(Horizontal, Vertical), municipio(Tijuana), segmento(VIS, VIM, VIR ), desarrollador, fraccionamiento, 
         precio_lista, m2_construidos, recamaras, banos, estatus
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
     `;
