@@ -4,6 +4,12 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
 
+// --- NUEVAS HERRAMIENTAS PARA EXCEL (NUEVO) ---
+const multer = require('multer');
+const xlsx = require('xlsx');
+// Configurar multer para guardar el Excel en la memoria temporal
+const upload = multer({ storage: multer.memoryStorage() });
+
 // Cargar variables de entorno
 dotenv.config();
 
@@ -27,6 +33,16 @@ app.get('/api/status', async (req, res) => {
     res.json({ status: 'Conectado a PostgreSQL', servidor: 'OK', hora: result.rows[0] });
   } catch (err) {
     res.status(500).json({ status: 'Error de conexión', error: err.message });
+  }
+});
+
+// --- RUTA: Obtener total de registros para el contador (NUEVO) ---
+app.get('/api/stats/count', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM capturas');
+    res.json({ total: parseInt(result.rows[0].count) });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al contar registros' });
   }
 });
 
@@ -66,6 +82,31 @@ app.get('/api/registros', async (req, res) => {
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los registros' });
+  }
+});
+
+// --- RUTA: Importar Excel (NUEVO) ---
+app.post('/api/importar', upload.single('archivoExcel'), async (req, res) => {
+  try {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No se subió ningún archivo.' });
+    }
+
+    // Leer el archivo Excel desde la memoria
+    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0]; // Tomamos la primera hoja
+    const excelData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    // Devolvemos la primera fila para analizarla en pantalla
+    res.json({ 
+        mensaje: 'Archivo leído con éxito', 
+        totalFilas: excelData.length,
+        primeraFila: excelData[0] 
+    });
+
+  } catch (error) {
+    console.error('Error al leer Excel:', error);
+    res.status(500).json({ error: 'Error procesando el archivo Excel.' });
   }
 });
 
