@@ -1,97 +1,193 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataVivienda - Captura</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataVivienda - Tijuana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="contenedor-app">
-        
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fa-solid fa-border-all"></i>
-                <h2>DataVivienda</h2>
-            </div>
-            <nav class="menu">
-                <a href="#" class="menu-item activo"><i class="fa-solid fa-plus"></i> Captura</a>
-                <a href="#" class="menu-item"><i class="fa-solid fa-arrow-up-from-bracket"></i> Importar</a>
-                <a href="#" class="menu-item"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
-                <a href="#" class="menu-item"><i class="fa-regular fa-clipboard"></i> Registros</a>
-            </nav>
-        </aside>
 
-        <main class="contenido-principal">
-            <header>
-                <h1>Módulo de Captura</h1>
-                <p>Ingresa la información del nuevo desarrollo.</p>
-            </header>
-            
-            <div class="panel-contenido">
-                <form id="formularioCaptura" class="formulario-grid">
-                    
-                    <div class="grupo-input">
-                        <label>Tipología</label>
-                        <select name="tipologia" required>
-                            <option value="">Selecciona...</option>
-                            <option value="Casa">Casa</option>
-                            <option value="Departamento">Departamento</option>
-                        </select>
-                    </div>
-                    <div class="grupo-input">
-                        <label>Municipio</label>
-                        <input type="text" name="municipio" value="Tijuana" required>
-                    </div>
-                    <div class="grupo-input">
-                        <label>Segmento</label>
-                        <input type="text" name="segmento" placeholder="Ej. Medio Residencial">
-                    </div>
-                    <div class="grupo-input">
-                        <label>Desarrollador</label>
-                        <input type="text" name="desarrollador" placeholder="Ej. Ruba">
-                    </div>
-                    <div class="grupo-input">
-                        <label>Fraccionamiento</label>
-                        <input type="text" name="fraccionamiento" required>
-                    </div>
-                    <div class="grupo-input">
-                        <label>Estatus</label>
-                        <select name="estatus">
-                            <option value="ACTIVO">Activo</option>
-                            <option value="PAUSA">Pausa</option>
-                            <option value="INACTIVO">Inactivo</option>
-                        </select>
-                    </div>
-
-                    <div class="grupo-input">
-                        <label>Precio de Lista ($)</label>
-                        <input type="number" name="precio_lista" step="0.01">
-                    </div>
-                    <div class="grupo-input">
-                        <label>M2 Construidos</label>
-                        <input type="number" name="m2_construidos" step="0.01">
-                    </div>
-                    <div class="grupo-input">
-                        <label>Habitaciones</label>
-                        <input type="number" name="recamaras">
-                    </div>
-                    <div class="grupo-input">
-                        <label>Baños</label>
-                        <input type="number" name="banos" step="0.5">
-                    </div>
-
-                    <div class="grupo-boton">
-                        <button type="submit" class="btn-guardar"><i class="fa-solid fa-save"></i> Guardar Registro</button>
-                    </div>
-
-                </form>
-                <div id="mensajeAlerta" class="alerta oculta"></div>
-            </div>
-        </main>
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="3" width="9" height="9" rx="1" fill="currentColor" opacity=".9"/>
+          <rect x="13" y="3" width="9" height="9" rx="1" fill="currentColor" opacity=".5"/>
+          <rect x="2" y="14" width="9" height="9" rx="1" fill="currentColor" opacity=".5"/>
+          <rect x="13" y="14" width="9" height="9" rx="1" fill="currentColor" opacity=".9"/>
+        </svg>
+      </div>
+      <span>DataVivienda</span>
     </div>
 
-    <script src="script.js"></script>
+    <nav class="sidebar__nav">
+      <button class="nav-btn active" data-tab="tab-captura">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Captura
+      </button>
+      <button class="nav-btn" data-tab="tab-importar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Importar
+      </button>
+      <button class="nav-btn" data-tab="tab-dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-btn" data-tab="tab-registros">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Registros
+      </button>
+    </nav>
+
+    <div class="sidebar__stats">
+      <div class="stat-mini">
+        <span class="stat-mini__label">Total registros</span>
+        <span class="stat-mini__value" id="statTotal">5126</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar__title" id="pageTitle">Módulo de Captura</div>
+    </header>
+
+    <section class="tab-panel active" id="tab-captura">
+      <div class="panel-header">
+        <h2>Registro de Desarrollo Inmobiliario</h2>
+        <p>Ingresa la información. Los datos se guardarán directamente en PostgreSQL (Railway).</p>
+      </div>
+
+      <div class="alert hidden" id="formAlert"></div>
+
+      <form id="capturaForm" novalidate>
+        <div class="form-grid">
+          
+          <div class="field-group">
+            <label>Tipología <span class="req">*</span></label>
+            <select name="tipologia" required>
+              <option value="">— Seleccione —</option>
+              <option value="Casa">Casa</option>
+              <option value="Departamento">Departamento</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label>Municipio</label>
+            <input type="text" name="municipio" value="Tijuana" required />
+          </div>
+
+          <div class="field-group">
+            <label>Segmento</label>
+            <input type="text" name="segmento" placeholder="Ej: Medio Residencial" />
+          </div>
+
+          <div class="field-group">
+            <label>Estatus</label>
+            <select name="estatus">
+              <option value="ACTIVO">Activo</option>
+              <option value="PAUSA">Pausa</option>
+              <option value="INACTIVO">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="field-group field-group--wide">
+            <label>Desarrollador</label>
+            <input type="text" name="desarrollador" placeholder="Ej: Ruba, Urbi, etc." />
+          </div>
+
+          <div class="field-group field-group--wide">
+            <label>Fraccionamiento <span class="req">*</span></label>
+            <input type="text" name="fraccionamiento" placeholder="Nombre del desarrollo" required />
+          </div>
+
+          <div class="field-group">
+            <label>Precio de Lista</label>
+            <div class="input-prefix">
+              <span>$</span>
+              <input type="number" name="precio_lista" placeholder="0.00" step="0.01" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>M2 Construidos</label>
+            <input type="number" name="m2_construidos" placeholder="0.00" step="0.01" />
+          </div>
+
+          <div class="field-group">
+            <label>Habitaciones</label>
+            <input type="number" name="recamaras" placeholder="0" />
+          </div>
+
+          <div class="field-group">
+            <label>Baños</label>
+            <input type="number" name="banos" placeholder="0.0" step="0.5" />
+          </div>
+
+        </div><div class="form-actions">
+          <button type="button" class="btn btn--ghost" id="btnLimpiar">
+            Limpiar
+          </button>
+          <button type="submit" class="btn btn--primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Guardar Registro
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="tab-panel" id="tab-importar">
+      <div class="panel-header">
+        <h2>Importar Datos Masivos</h2>
+        <p>Sube tu archivo de Excel para actualizar la base de datos.</p>
+      </div>
+      <div style="text-align: center; padding: 60px; border: 1px dashed var(--border); border-radius: var(--radius); color: var(--text-muted);">
+        <p>Área de carga de archivos (Próximamente)</p>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-dashboard">
+      <div class="panel-header">
+        <h2>Dashboard Analítico</h2>
+        <p>Visualización del mercado inmobiliario en Tijuana.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="kpi-card__label">Total Desarrollos</span><span class="kpi-card__value">—</span></div>
+        <div class="kpi-card"><span class="kpi-card__label">Precio Promedio</span><span class="kpi-card__value">—</span></div>
+        <div class="kpi-card"><span class="kpi-card__label">M2 Promedio</span><span class="kpi-card__value">—</span></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-registros">
+      <div class="panel-header">
+        <h2>Base de Datos</h2>
+        <p>Información almacenada en Railway.</p>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Desarrollo</th>
+              <th>Tipología</th>
+              <th>Precio</th>
+              <th>M2 Const.</th>
+              <th>Estatus</th>
+            </tr>
+          </thead>
+          <tbody id="tablaRegistrosBody">
+            <tr class="empty-row"><td colspan="6">Cargando datos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
