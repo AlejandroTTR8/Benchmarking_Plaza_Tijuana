@@ -32,38 +32,45 @@ document.addEventListener('DOMContentLoaded', () => {
         ocultarAlerta();
     });
 
-    // Envío del Formulario
-    capturaForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData(capturaForm);
-        const data = Object.fromEntries(formData.entries());
+// --- LÓGICA DE CAPTURA MANUAL (ACTUALIZADA PARA 30+ CAMPOS) ---
+const capturaForm = document.getElementById('capturaForm');
+if (capturaForm) {
+  capturaForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Recolectar TODOS los datos del formulario automáticamente
+    const formData = new FormData(capturaForm);
+    const data = Object.fromEntries(formData.entries());
 
-        // Parsear números
-        data.precio_lista = data.precio_lista ? parseFloat(data.precio_lista) : null;
-        data.m2_construidos = data.m2_construidos ? parseFloat(data.m2_construidos) : null;
-        data.recamaras = data.recamaras ? parseInt(data.recamaras) : null;
-        data.banos = data.banos ? parseFloat(data.banos) : null;
+    // Limpiar campos vacíos para que Postgres no marque error y asigne NULL
+    for (let key in data) {
+      if (data[key] === "") {
+        data[key] = null;
+      }
+    }
 
-        try {
-            const response = await fetch('/api/capturas', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+    try {
+      const response = await fetch('/api/capturas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
 
-            const result = await response.json();
-
-            if (response.ok) {
-                mostrarAlerta('¡Registro guardado exitosamente en PostgreSQL!', 'success');
-                capturaForm.reset();
-            } else {
-                mostrarAlerta('Error al guardar: ' + result.error, 'error');
-            }
-        } catch (error) {
-            mostrarAlerta('Error de conexión con el servidor Railway.', 'error');
-        }
-    });
+      if (response.ok) {
+        alert('✅ Registro guardado con éxito!');
+        capturaForm.reset();
+        if (typeof actualizarContador === 'function') actualizarContador(); // Actualiza tu contador
+      } else {
+        alert('❌ Error al guardar: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+      alert('❌ Ocurrió un problema de conexión con el servidor.');
+    }
+  });
+}
 
     // Funciones de Alerta
     function mostrarAlerta(mensaje, tipo) {
