@@ -225,14 +225,15 @@ body {
 ══════════════════════════════════════════════════════ */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
+  align-items: end; /* Alinea los inputs aunque los títulos tengan diferentes alturas */
 }
 
 .field-group { display: flex; flex-direction: column; gap: 5px; }
 
-.field-group--wide { grid-column: span 2; }
+.field-group--wide { grid-column: 1 / -1; } /* Obliga a los títulos a ocupar todo el ancho */
 
 label {
   font-size: 11px;
@@ -626,8 +627,6 @@ select option { background: var(--bg-card); }
 ══════════════════════════════════════════════════════ */
 @media (max-width: 1100px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-grid { grid-template-columns: repeat(2, 1fr); }
-  .field-group--wide { grid-column: span 2; }
 }
 
 @media (max-width: 860px) {
@@ -647,8 +646,6 @@ select option { background: var(--bg-card); }
 }
 
 @media (max-width: 640px) {
-  .form-grid { grid-template-columns: 1fr; }
-  .field-group--wide { grid-column: span 1; }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .charts-grid { grid-template-columns: 1fr; }
   .chart-card--wide { grid-column: span 1; }
