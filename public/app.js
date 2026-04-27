@@ -257,47 +257,152 @@ function renderDashboard(registros) {
     });
   }
 
-  // ─ Gráfica: Tipología ─────────────────────────────
-  if (chartTipo) chartTipo.destroy();
-  const ctxT = document.getElementById('chartTipo');
-  if (ctxT) {
-    chartTipo = new Chart(ctxT.getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: ['Vertical', 'Horizontal'],
-        datasets: [{
-          label: 'Cantidad',
-          data: [vertical, horizontal],
-          backgroundColor: ['rgba(61,127,255,.7)', 'rgba(168,85,247,.7)'],
-          borderColor: ['#3d7fff', '#a855f7'],
-          borderWidth: 1.5, borderRadius: 4,
-        }],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { ticks: { color: '#6b7a99', font: { family: 'IBM Plex Sans', size: 11 } }, grid: { color: '#2a3347' } },
-          y: { beginAtZero: true, ticks: { color: '#6b7a99', font: { family: 'IBM Plex Mono', size: 11 }, stepSize: 1 }, grid: { color: '#2a3347' } },
-        },
-      },
+// ─── Función matemática para obtener el valor que más se repite (Moda) ───
+function calcularModa(arr) {
+  if (!arr.length) return null;
+  const conteo = {};
+  let maxValor = arr[0], maxVeces = 1;
+  arr.forEach(v => {
+      conteo[v] = (conteo[v] || 0) + 1;
+      if (conteo[v] > maxVeces) { maxValor = v; maxVeces = conteo[v]; }
+  });
+  return maxValor;
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD COMPARATIVO
+// ═══════════════════════════════════════════════════════
+function renderDashboard(registros, isFiltrado = false) {
+  // 1. Agrupar registros (Por Desarrollador si hay filtro, o Global si no lo hay)
+  let grupos = {};
+  if (isFiltrado) {
+    registros.forEach(r => {
+      const dev = r.desarrollador ? r.desarrollador.toUpperCase() : 'DESCONOCIDO';
+      if (!grupos[dev]) grupos[dev] = [];
+      grupos[dev].push(r);
     });
+  } else {
+    grupos['MERCADO GLOBAL'] = registros;
   }
 
-  // ─ Gráfica: Top 10 fraccionamientos por precio promedio ─
+  // 2. Preparar el HTML para los KPIs y las Zonas
+  let htmlTotal = '', htmlPromedio = '', htmlMetros = '', htmlEstatus = '';
+  let zonasSet = new Set();
+
+  Object.keys(grupos).forEach(dev => {
+    const regs = grupos[dev];
+    const total = regs.length;
+    const promedio = regs.reduce((acc, r) => acc + (parseFloat(r.precio_lista) || 0), 0) / (total || 1);
+    
+    // Calcular M2 Construidos (el que más se repite)
+    const metros = regs.map(r => parseFloat(r.m2_construidos)).filter(m => !isNaN(m));
+    const modaMetros = calcularModa(metros);
+    
+    // Estatus
+    const activos = regs.filter(r => (r.estatus || '').toUpperCase() === 'ACTIVO').length;
+    const inactivos = total - activos;
+
+    // Recolectar zonas únicas
+    regs.forEach(r => { if (r.zona) zonasSet.add(r.zona.toUpperCase()); });
+
+    // Diseño de cada línea del KPI
+    const prefix = isFiltrado ? `<span style="color:var(--text-muted); font-size:11px; display:inline-block; width:70px;">${dev}:</span> ` : '';
+    const divisor = 'border-bottom: 1px solid rgba(255,255,255,0.05); padding: 4px 0;';
+
+    htmlTotal += `<div style="${divisor}">${prefix}<span style="color:var(--accent); font-weight:bold">${total}</span> registros</div>`;
+    htmlPromedio += `<div style="${divisor}">${prefix}<span style="color:var(--accent); font-family:var(--mono)">${total ? formatPeso(promedio) : '$0'}</span></div>`;
+    htmlMetros += `<div style="${divisor}">${prefix}<span style="color:#a855f7; font-weight:bold">${modaMetros ? modaMetros + ' m²' : 'N/D'}</span></div>`;
+    htmlEstatus += `<div style="${divisor}">${prefix}<span style="color:#22c55e">${activos} Act</span> / <span style="color:#f43f5e">${inactivos} Inact</span></div>`;
+  });
+
+  // Imprimir KPIs
+  document.getElementById('kpiTotal').innerHTML = htmlTotal || '—';
+  document.getElementById('kpiPromedio').innerHTML = htmlPromedio || '—';
+  document.getElementById('kpiMetros').innerHTML = htmlMetros || '—';
+  document.getElementById('kpiEstatus').innerHTML = htmlEstatus || '—';
+  
+  // Imprimir Zonas
+  document.getElementById('lblZonas').textContent = zonasSet.size > 0 ? Array.from(zonasSet).join(', ') : 'N/D';
+
+  if (!registros.length) {
+    document.getElementById('tablaFraccs').innerHTML = '';
+    document.getElementById('tablaProtos').innerHTML = '';
+    if (chartFracc) chartFracc.destroy();
+    return;
+  }
+
+  // 3. Tabla 1: Desarrollador -> Fraccionamientos -> Recuento de Prototipos
+  let htmlTabla1 = `<thead><tr><th>Desarrollador / Fracc.</th><th style="text-align:center">Recuento Prototipos</th></tr></thead><tbody>`;
+  Object.keys(grupos).forEach(dev => {
+    const fraccs = {};
+    grupos[dev].forEach(r => {
+      const f = r.fraccionamiento || 'N/D';
+      if (!fraccs[f]) fraccs[f] = new Set();
+      if (r.prototipo) fraccs[f].add(r.prototipo); // Usamos Set para no contar prototipos duplicados
+    });
+
+    htmlTabla1 += `<tr style="background:var(--bg-panel)"><td colspan="2" style="font-weight:bold; color:var(--accent)">${dev}</td></tr>`;
+    Object.keys(fraccs).forEach(f => {
+      htmlTabla1 += `<tr><td style="padding-left: 20px;">${f}</td><td style="text-align:center; font-weight:bold; color:var(--text-primary)">${fraccs[f].size}</td></tr>`;
+    });
+  });
+  htmlTabla1 += `</tbody>`;
+  document.getElementById('tablaFraccs').innerHTML = htmlTabla1;
+
+  // 4. Tabla 2: Fraccionamiento -> Prototipo -> Precio Promedio
+  let htmlTabla2 = `<thead><tr><th>Fraccionamiento</th><th>Prototipo</th><th>Precio Promedio</th></tr></thead><tbody>`;
+  Object.keys(grupos).forEach(dev => {
+    const fraccs = {};
+    grupos[dev].forEach(r => {
+      const f = r.fraccionamiento || 'N/D';
+      const p = r.prototipo || 'N/D';
+      if (!fraccs[f]) fraccs[f] = {};
+      if (!fraccs[f][p]) fraccs[f][p] = { suma: 0, count: 0 };
+      fraccs[f][p].suma += parseFloat(r.precio_lista) || 0;
+      fraccs[f][p].count++;
+    });
+
+    htmlTabla2 += `<tr style="background:var(--bg-panel)"><td colspan="3" style="font-weight:bold; color:var(--accent)">${dev}</td></tr>`;
+    Object.keys(fraccs).forEach(f => {
+      Object.keys(fraccs[f]).forEach((p, index) => {
+        const avg = fraccs[f][p].suma / fraccs[f][p].count;
+        htmlTabla2 += `<tr>
+          ${index === 0 ? `<td rowspan="${Object.keys(fraccs[f]).length}" style="border-right:1px solid var(--border)">${f}</td>` : ''}
+          <td>${p}</td>
+          <td style="color:var(--accent); font-family:var(--mono)">${formatPeso(avg)}</td>
+        </tr>`;
+      });
+    });
+  });
+  htmlTabla2 += `</tbody>`;
+  document.getElementById('tablaProtos').innerHTML = htmlTabla2;
+
+  // 5. Gráfica: Top 10 fraccionamientos con colores dinámicos si se comparan desarrolladores
   const fraccMap = {};
   registros.forEach(r => {
     const f = r.fraccionamiento || 'N/D';
-    if (!fraccMap[f]) fraccMap[f] = { suma: 0, count: 0 };
+    const d = r.desarrollador ? r.desarrollador.toUpperCase() : 'DESCONOCIDO';
+    if (!fraccMap[f]) fraccMap[f] = { suma: 0, count: 0, dev: d };
     fraccMap[f].suma  += parseFloat(r.precio_lista) || 0;
     fraccMap[f].count += 1;
   });
 
   const top10 = Object.entries(fraccMap)
     .filter(([, v]) => v.suma > 0)
-    .map(([k, v]) => ({ nombre: k, promedio: v.suma / v.count }))
+    .map(([k, v]) => ({ nombre: k, promedio: v.suma / v.count, dev: v.dev }))
     .sort((a, b) => b.promedio - a.promedio)
     .slice(0, 10);
+
+  // Asignar colores por desarrollador si estamos comparando
+  const paletaMulti = ['#3d7fff', '#a855f7', '#ec4899', '#22c55e', '#f59e0b'];
+  const devColors = {};
+  let colorIndex = 0;
+  top10.forEach(f => {
+    if (!devColors[f.dev]) {
+      devColors[f.dev] = paletaMulti[colorIndex % paletaMulti.length];
+      colorIndex++;
+    }
+  });
 
   if (chartFracc) chartFracc.destroy();
   const ctxF = document.getElementById('chartFracc');
@@ -309,8 +414,9 @@ function renderDashboard(registros) {
         datasets: [{
           label: 'Precio Promedio',
           data: top10.map(f => f.promedio),
-          backgroundColor: 'rgba(61,127,255,.7)',
-          borderColor: '#3d7fff',
+          // Si filtramos múltiples, usa un color por desarrollador, si no, usa el azul por defecto
+          backgroundColor: top10.map(f => isFiltrado ? devColors[f.dev] + 'b3' : 'rgba(61,127,255,.7)'),
+          borderColor: top10.map(f => isFiltrado ? devColors[f.dev] : '#3d7fff'),
           borderWidth: 1.5, borderRadius: 4,
         }],
       },
@@ -318,13 +424,57 @@ function renderDashboard(registros) {
         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: { callbacks: { label: ctx => ' ' + formatPeso(ctx.raw) } },
+          tooltip: { callbacks: { 
+            title: ctx => ctx[0].label + (isFiltrado ? ` (${top10[ctx[0].dataIndex].dev})` : ''),
+            label: ctx => ' ' + formatPeso(ctx.raw) 
+          }},
         },
         scales: {
           x: { ticks: { color: '#6b7a99', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => '$' + Intl.NumberFormat('es-MX').format(v) }, grid: { color: '#2a3347' } },
           y: { ticks: { color: '#6b7a99', font: { family: 'IBM Plex Sans', size: 11 } }, grid: { display: false } },
         },
       },
+    });
+  }
+}
+
+// ─── Filtro del dashboard (Búsqueda Múltiple) ──────────────────────────────
+function initFiltroDashboard() {
+  const btnFiltrar      = document.getElementById('btnFiltrar');
+  const btnLimpiarFiltro = document.getElementById('btnLimpiarFiltro');
+  const inputFiltro     = document.getElementById('filtroDesarrollador');
+
+  if (btnFiltrar) {
+    btnFiltrar.addEventListener('click', () => {
+      const q = inputFiltro?.value.trim().toLowerCase() || '';
+      if (!q) {
+        renderDashboard(todosLosRegistros, false);
+        return;
+      }
+      
+      // Separar por coma y limpiar espacios para permitir búsquedas múltiples (Ej. "Derex, Ruba")
+      const devsBuscados = q.split(',').map(s => s.trim()).filter(s => s);
+
+      const filtrados = todosLosRegistros.filter(r => {
+        const dev = String(r.desarrollador || '').toLowerCase();
+        // Verifica si el desarrollador del registro coincide con ALGUNO de los que buscamos
+        return devsBuscados.some(buscado => dev.includes(buscado));
+      });
+      
+      renderDashboard(filtrados, true);
+    });
+  }
+
+  if (btnLimpiarFiltro) {
+    btnLimpiarFiltro.addEventListener('click', () => {
+      if (inputFiltro) inputFiltro.value = '';
+      renderDashboard(todosLosRegistros, false);
+    });
+  }
+
+  if (inputFiltro) {
+    inputFiltro.addEventListener('keydown', e => {
+      if (e.key === 'Enter') btnFiltrar?.click();
     });
   }
 }
