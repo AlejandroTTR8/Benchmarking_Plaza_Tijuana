@@ -111,7 +111,7 @@
       </form>
     </div>
 
-    <div class="tab-panel" id="dashboard">
+   <div class="tab-panel" id="tab-dashboard">
       <div class="panel-header">
         <h2>Dashboard Comparativo</h2>
         <p>Compara el mercado filtrando por uno o múltiples desarrolladores.</p>
@@ -119,20 +119,20 @@
 
       <div class="filter-bar" style="display: flex; gap: 16px; align-items: flex-end; margin-bottom: 24px;">
         <div class="filter-bar__input" style="flex: 2;">
-          <label for="filtroDesarrollador" style="display: block; margin-bottom: 5px; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Comparar Desarrolladores:</label>
+          <label style="display: block; margin-bottom: 5px; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Comparar Desarrolladores:</label>
           <div style="display: flex; gap: 8px;">
-            <input type="text" id="filtroDesarrollador" placeholder="Ej. Derex, Ruba, Encasa (separados por coma)" style="flex: 1; padding: 9px 12px; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); border-radius: 6px;" />
+            <input type="text" id="filtroDesarrollador" placeholder="Ej. Derex, Encasa (separados por coma)" style="flex: 1; padding: 9px 12px; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); border-radius: 6px;" />
             <button class="btn btn--primary" id="btnFiltrar">Aplicar</button>
             <button class="btn btn--ghost" id="btnLimpiarFiltro">Limpiar</button>
           </div>
         </div>
-        <div class="filter-bar__zona" style="flex: 1; padding: 10px 14px; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border); min-height: 40px; display: flex; flex-direction: column; justify-content: center;">
-          <span style="font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Zona(s) de Influencia:</span>
-          <span id="lblZonas" style="font-size: 13px; font-weight: 600; color: var(--accent); margin-top: 2px;">—</span>
+        <div class="filter-bar__zona" style="flex: 1; padding: 10px 14px; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border); min-height: 40px;">
+          <span style="font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Zonas:</span>
+          <div id="lblZonas" style="font-size: 13px; font-weight: 600; color: var(--accent);">—</div>
         </div>
       </div>
 
-      <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi-grid">
         <div class="kpi-card">
            <span class="kpi-card__label">Total Registros</span>
            <div id="kpiTotal" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
@@ -146,24 +146,24 @@
            <div id="kpiMetros" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
         </div>
         <div class="kpi-card">
-           <span class="kpi-card__label">Estatus de Inventario</span>
+           <span class="kpi-card__label">Estatus</span>
            <div id="kpiEstatus" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
         </div>
       </div>
 
       <div class="charts-grid" style="margin-top: 24px;">
         <div class="chart-card">
-          <div class="chart-card__header">Fraccionamientos y Prototipos</div>
-          <div class="chart-card__body" style="height: 280px; padding: 0; overflow: auto; align-items: start;">
-             <table class="data-table" style="width: 100%;">
+          <div class="chart-card__header">Desarrollador y Fraccionamientos</div>
+          <div class="chart-card__body" style="height: 300px; overflow: auto; padding: 0;">
+             <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                 <tbody id="tablaFraccs"></tbody>
              </table>
           </div>
         </div>
         <div class="chart-card">
-          <div class="chart-card__header">Precios por Prototipo</div>
-          <div class="chart-card__body" style="height: 280px; padding: 0; overflow: auto; align-items: start;">
-             <table class="data-table" style="width: 100%;">
+          <div class="chart-card__header">Lista de Prototipos y Precios</div>
+          <div class="chart-card__body" style="height: 300px; overflow: auto; padding: 0;">
+             <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                 <tbody id="tablaProtos"></tbody>
              </table>
           </div>
