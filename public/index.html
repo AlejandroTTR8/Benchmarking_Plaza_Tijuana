@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -43,7 +45,7 @@
   <main class="main">
     
     <header class="topbar">
-      <div class="topbar__title">Módulo de Captura</div>
+      <div class="topbar__title">Sistema de Gestión</div>
       <div class="topbar__date">Sistema Activo</div>
     </header>
 
@@ -58,132 +60,36 @@
           <h3 style="color: var(--accent);">1. Clasificación y Ubicación</h3>
         </div>
 
-        <div class="field-group">
-          <label>Tipología</label>
-          <select name="tipologia" required>
-            <option value="">Selecciona...</option>
-            <option value="Vertical">Vertical</option>
-            <option value="Horizontal">Horizontal</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Municipio</label>
-          <select name="municipio" required>
-            <option value="">Selecciona...</option>
-            <option value="Tijuana">Tijuana</option>
-            <option value="Playas de Rosarito">Playas de Rosarito</option>
-            <option value="Tecate">Tecate</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Zona (Delegación)</label>
-          <select name="zona">
-            <option value="">Selecciona...</option>
-            <option value="Centro">Centro</option>
-            <option value="Cerro Colorado">Cerro Colorado</option>
-            <option value="La Mesa">La Mesa</option>
-            <option value="La Presa Abelardo L. Rodríguez">La Presa Abelardo L. Rodríguez</option>
-            <option value="La Presa Este">La Presa Este</option>
-            <option value="Otay Centenario">Otay Centenario</option>
-            <option value="Playas de Tijuana">Playas de Tijuana</option>
-            <option value="San Antonio de los Buenos">San Antonio de los Buenos</option>
-            <option value="Sánchez Taboada">Sánchez Taboada</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Segmento</label>
-          <select name="segmento" required>
-            <option value="">Selecciona...</option>
-            <option value="VIM">VIM</option>
-            <option value="VIS">VIS</option>
-            <option value="VIR">VIR</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Subsegmento</label>
-          <select name="subsegmento">
-            <option value="">Selecciona...</option>
-            <option value="Tradicional">Tradicional</option>
-            <option value="Media Baja">Media Baja</option>
-            <option value="Media Media">Media Media</option>
-            <option value="Media Alta">Media Alta</option>
-            <option value="Residencial">Residencial</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Desarrollador</label>
-          <input type="text" name="desarrollador" placeholder="Ej. Ruba" />
-        </div>
-        <div class="field-group">
-          <label>Fraccionamiento</label>
-          <input type="text" name="fraccionamiento" />
-        </div>
-        <div class="field-group">
-          <label>Prototipo</label>
-          <input type="text" name="prototipo" />
-        </div>
-        <div class="field-group">
-          <label>Estatus</label>
-          <select name="estatus" required>
-            <option value="ACTIVO">ACTIVO</option>
-            <option value="INACTIVO">INACTIVO</option>
-            <option value="PAUSA">PAUSA</option>
-          </select>
-        </div>
+        <div class="field-group"><label>Tipología</label><select name="tipologia" required><option value="">Selecciona...</option><option value="Vertical">Vertical</option><option value="Horizontal">Horizontal</option></select></div>
+        <div class="field-group"><label>Municipio</label><select name="municipio" required><option value="">Selecciona...</option><option value="Tijuana">Tijuana</option><option value="Playas de Rosarito">Playas de Rosarito</option><option value="Tecate">Tecate</option></select></div>
+        <div class="field-group"><label>Zona (Delegación)</label><select name="zona"><option value="">Selecciona...</option><option value="Centro">Centro</option><option value="Cerro Colorado">Cerro Colorado</option><option value="La Mesa">La Mesa</option><option value="La Presa Abelardo L. Rodríguez">La Presa Abelardo L. Rodríguez</option><option value="La Presa Este">La Presa Este</option><option value="Otay Centenario">Otay Centenario</option><option value="Playas de Tijuana">Playas de Tijuana</option><option value="San Antonio de los Buenos">San Antonio de los Buenos</option><option value="Sánchez Taboada">Sánchez Taboada</option></select></div>
+        <div class="field-group"><label>Segmento</label><select name="segmento" required><option value="">Selecciona...</option><option value="VIM">VIM</option><option value="VIS">VIS</option><option value="VIR">VIR</option></select></div>
+        <div class="field-group"><label>Subsegmento</label><select name="subsegmento"><option value="">Selecciona...</option><option value="Tradicional">Tradicional</option><option value="Media Baja">Media Baja</option><option value="Media Media">Media Media</option><option value="Media Alta">Media Alta</option><option value="Residencial">Residencial</option></select></div>
+        <div class="field-group"><label>Desarrollador</label><input type="text" name="desarrollador" placeholder="Ej. Ruba" /></div>
+        <div class="field-group"><label>Fraccionamiento</label><input type="text" name="fraccionamiento" /></div>
+        <div class="field-group"><label>Prototipo</label><input type="text" name="prototipo" /></div>
+        <div class="field-group"><label>Estatus</label><select name="estatus" required><option value="ACTIVO">ACTIVO</option><option value="INACTIVO">INACTIVO</option><option value="PAUSA">PAUSA</option></select></div>
 
         <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;">
           <h3 style="color: var(--accent);">2. Dimensiones y Precios</h3>
         </div>
 
-        <div class="field-group">
-          <label>Precio de Lista ($)</label>
-          <input type="number" name="precio_lista" placeholder="Ej. 1500000" />
-        </div>
-        <div class="field-group">
-          <label>M2 Construidos (Totales)</label>
-          <input type="number" step="0.01" name="m2_construidos" />
-        </div>
-        <div class="field-group">
-          <label>M2 Habitables</label>
-          <input type="number" step="0.01" name="m2_habitables" />
-        </div>
-        <div class="field-group">
-          <label>M2 Terreno</label>
-          <input type="number" step="0.01" name="m2_terreno" />
-        </div>
-        <div class="field-group">
-          <label>Metros Frente</label>
-          <input type="number" step="0.01" name="mts_frente" />
-        </div>
-        <div class="field-group">
-          <label>Metros Fondo</label>
-          <input type="number" step="0.01" name="mts_fondo" />
-        </div>
-        <div class="field-group">
-          <label>Precio Excedente Terreno ($)</label>
-          <input type="number" name="precio_excedente_terreno" />
-        </div>
+        <div class="field-group"><label>Precio de Lista ($)</label><input type="number" name="precio_lista" placeholder="Ej. 1500000" /></div>
+        <div class="field-group"><label>M2 Construidos (Totales)</label><input type="number" step="0.01" name="m2_construidos" /></div>
+        <div class="field-group"><label>M2 Habitables</label><input type="number" step="0.01" name="m2_habitables" /></div>
+        <div class="field-group"><label>M2 Terreno</label><input type="number" step="0.01" name="m2_terreno" /></div>
+        <div class="field-group"><label>Metros Frente</label><input type="number" step="0.01" name="mts_frente" /></div>
+        <div class="field-group"><label>Metros Fondo</label><input type="number" step="0.01" name="mts_fondo" /></div>
+        <div class="field-group"><label>Precio Excedente Terreno ($)</label><input type="number" name="precio_excedente_terreno" /></div>
 
         <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;">
           <h3 style="color: var(--accent);">3. Distribución y Amenidades</h3>
         </div>
 
-        <div class="field-group">
-          <label># Niveles</label>
-          <input type="number" name="niveles" min="1" />
-        </div>
-        <div class="field-group">
-          <label># Recámaras</label>
-          <input type="number" name="recamaras" min="1" max="6" />
-        </div>
-        <div class="field-group">
-          <label># Baños</label>
-          <input type="number" step="0.5" name="banos" min="1" max="6" placeholder="Ej. 1.5" />
-        </div>
-        <div class="field-group">
-          <label>Huellas Estacionamiento</label>
-          <input type="number" name="huellas_estacionamiento" min="1" max="4" />
-        </div>
+        <div class="field-group"><label># Niveles</label><input type="number" name="niveles" min="1" /></div>
+        <div class="field-group"><label># Recámaras</label><input type="number" name="recamaras" min="1" max="6" /></div>
+        <div class="field-group"><label># Baños</label><input type="number" step="0.5" name="banos" min="1" max="6" placeholder="Ej. 1.5" /></div>
+        <div class="field-group"><label>Huellas Estacionamiento</label><input type="number" name="huellas_estacionamiento" min="1" max="4" /></div>
 
         <div class="field-group"><label>Alcoba</label><select name="alcoba"><option value="false">NO</option><option value="true">SÍ</option></select></div>
         <div class="field-group"><label>Walk-in Closet (Rec Ppal)</label><select name="walk_in_closet"><option value="false">NO</option><option value="true">SÍ</option></select></div>
@@ -203,23 +109,46 @@
           </button>
         </div>
       </form>
-      </div>
+    </div>
+
     <div class="tab-panel" id="dashboard">
       <div class="panel-header">
         <h2>Dashboard</h2>
-        <p>Resumen de indicadores clave de la base de datos.</p>
+        <p>Visualización y análisis de los registros capturados.</p>
       </div>
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <span class="kpi-card__label">Viviendas Verticales</span>
-          <span class="kpi-card__value">0</span>
+
+      <div class="filter-bar">
+        <label for="filtroFraccionamiento">Filtrar por Fraccionamiento:</label>
+        <div class="filter-bar__input">
+          <input type="text" id="filtroFraccionamiento" placeholder="Escribe para filtrar…" />
+          <button class="btn btn--sm" id="btnFiltrar">Aplicar</button>
+          <button class="btn btn--sm btn--ghost" id="btnLimpiarFiltro">Limpiar</button>
         </div>
-        <div class="kpi-card">
-          <span class="kpi-card__label">Viviendas Horizontales</span>
-          <span class="kpi-card__value">0</span>
+      </div>
+
+      <div class="kpi-grid" id="kpiGrid">
+        <div class="kpi-card"><span class="kpi-card__label">Total Registros</span><span class="kpi-card__value" id="kpiTotal">—</span></div>
+        <div class="kpi-card"><span class="kpi-card__label">Valor Promedio</span><span class="kpi-card__value" id="kpiPromedio">—</span></div>
+        <div class="kpi-card"><span class="kpi-card__label">Vivienda Vertical</span><span class="kpi-card__value" id="kpiNueva">—</span></div>
+        <div class="kpi-card"><span class="kpi-card__label">Vivienda Horizontal</span><span class="kpi-card__value" id="kpiUsada">—</span></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card__header">Distribución por Municipio</div>
+          <div class="chart-card__body"><canvas id="chartGrupo"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card__header">Tipo de Vivienda</div>
+          <div class="chart-card__body"><canvas id="chartTipo"></canvas></div>
+        </div>
+        <div class="chart-card chart-card--wide">
+          <div class="chart-card__header">Valor por Fraccionamiento (Top 10)</div>
+          <div class="chart-card__body"><canvas id="chartFracc"></canvas></div>
         </div>
       </div>
     </div>
+
     <div class="tab-panel" id="base-datos">
       <div class="panel-header">
         <h2>Base de Datos de Viviendas</h2>
@@ -246,19 +175,39 @@
 
     <div class="tab-panel" id="importar">
       <div class="panel-header">
-        <h2>Importar Datos Masivos</h2>
-        <p>Sube tu archivo de Excel (.xlsx) para cargar los registros directamente a PostgreSQL.</p>
+        <h2>Importar Excel</h2>
+        <p>Carga masiva de registros desde tu archivo .xlsx existente.</p>
       </div>
-      
-      <form id="importarForm" style="text-align: center; padding: 60px; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--bg-card);">
-        <h3 style="margin-bottom: 10px; color: var(--text-primary);">Selecciona tu archivo</h3>
-        <input type="file" id="archivoExcel" accept=".xlsx, .xls" required style="margin-bottom: 20px; color: var(--text-muted);" />
-        <br>
-        <button type="submit" class="btn btn--primary" id="btnImportar">
-          Procesar Archivo
-        </button>
-        <div id="importAlert" class="alert hidden" style="margin-top: 20px; text-align: left;"></div>
-      </form>
+
+      <div class="import-box">
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone__icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <p class="drop-zone__text">Arrastra tu archivo <strong>.xlsx</strong> aquí</p>
+          <p class="drop-zone__sub">o haz clic para seleccionarlo</p>
+          <input type="file" id="archivoExcel" accept=".xlsx,.xls" class="drop-zone__input" style="opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" />
+        </div>
+
+        <div class="import-info">
+          <div class="import-info__title">Asegúrate de que tu Excel coincida con los campos del formulario.</div>
+        </div>
+
+        <div class="import-file hidden" id="importFile">
+          <span id="importFileName">archivo.xlsx</span>
+        </div>
+
+        <div class="import-actions" style="margin-top: 20px; text-align: center;">
+          <button class="btn btn--primary btn--lg" id="btnImportar">
+            Importar Registros
+          </button>
+        </div>
+      </div>
     </div>
   </main>
 
