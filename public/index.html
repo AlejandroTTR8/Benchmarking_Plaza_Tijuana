@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataVivienda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">📊</div>
+      <span>DataVivienda</span>
+    </div>
+    <nav class="sidebar__nav">
+      <!-- data-target debe coincidir exactamente con el id del panel -->
+      <button class="nav-btn" data-target="dashboard">
+        <span>📊 Dashboard</span>
+      </button>
+      <button class="nav-btn active" data-target="captura">
+        <span>📝 Captura Manual</span>
+      </button>
+      <button class="nav-btn" data-target="base-datos">
+        <span>🗃️ Base de Datos</span>
+      </button>
+      <button class="nav-btn" data-target="importar">
+        <span>📁 Importar Excel</span>
+      </button>
+    </nav>
+    <div class="sidebar__stats">
+      <div class="stat-mini">
+        <span class="stat-mini__label">Total Registros</span>
+        <span class="stat-mini__value" id="contadorTotal">0</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar__title">Sistema de Gestión</div>
+      <div class="topbar__date" id="topbarFecha">Sistema Activo</div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB: CAPTURA MANUAL
+    ══════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="captura">
+      <div class="panel-header">
+        <h2>Nuevo Registro de Vivienda</h2>
+        <p>Llena los datos a continuación para registrar la propiedad en la base de datos.</p>
+      </div>
+
+      <form id="capturaForm" class="form-grid">
+        <div class="field-group field-group--wide section-title">
+          <h3>1. Clasificación y Ubicación</h3>
+        </div>
+
+        <div class="field-group"><label>Tipología</label><select name="tipologia" required><option value="">Selecciona...</option><option value="Vertical">Vertical</option><option value="Horizontal">Horizontal</option></select></div>
+        <div class="field-group"><label>Municipio</label><select name="municipio" required><option value="">Selecciona...</option><option value="Tijuana">Tijuana</option><option value="Playas de Rosarito">Playas de Rosarito</option><option value="Tecate">Tecate</option></select></div>
+        <div class="field-group"><label>Zona (Delegación)</label><select name="zona"><option value="">Selecciona...</option><option value="Centro">Centro</option><option value="Cerro Colorado">Cerro Colorado</option><option value="La Mesa">La Mesa</option><option value="La Presa Abelardo L. Rodríguez">La Presa Abelardo L. Rodríguez</option><option value="La Presa Este">La Presa Este</option><option value="Otay Centenario">Otay Centenario</option><option value="Playas de Tijuana">Playas de Tijuana</option><option value="San Antonio de los Buenos">San Antonio de los Buenos</option><option value="Sánchez Taboada">Sánchez Taboada</option></select></div>
+        <div class="field-group"><label>Segmento</label><select name="segmento" required><option value="">Selecciona...</option><option value="VIM">VIM</option><option value="VIS">VIS</option><option value="VIR">VIR</option></select></div>
+        <div class="field-group"><label>Subsegmento</label><select name="subsegmento"><option value="">Selecciona...</option><option value="Tradicional">Tradicional</option><option value="Media Baja">Media Baja</option><option value="Media Media">Media Media</option><option value="Media Alta">Media Alta</option><option value="Residencial">Residencial</option></select></div>
+        <div class="field-group"><label>Desarrollador</label><input type="text" name="desarrollador" placeholder="Ej. Ruba" /></div>
+        <div class="field-group"><label>Fraccionamiento</label><input type="text" name="fraccionamiento" /></div>
+        <div class="field-group"><label>Prototipo</label><input type="text" name="prototipo" /></div>
+        <div class="field-group"><label>Estatus</label><select name="estatus" required><option value="ACTIVO">ACTIVO</option><option value="INACTIVO">INACTIVO</option><option value="PAUSA">PAUSA</option></select></div>
+
+        <div class="field-group field-group--wide section-title" style="margin-top:10px">
+          <h3>2. Dimensiones y Precios</h3>
+        </div>
+
+        <div class="field-group"><label>Precio de Lista ($)</label><input type="number" name="precio_lista" placeholder="Ej. 1500000" /></div>
+        <div class="field-group"><label>M2 Construidos</label><input type="number" step="0.01" name="m2_construidos" /></div>
+        <div class="field-group"><label>M2 Habitables</label><input type="number" step="0.01" name="m2_habitables" /></div>
+        <div class="field-group"><label>M2 Terreno</label><input type="number" step="0.01" name="m2_terreno" /></div>
+        <div class="field-group"><label>Metros Frente</label><input type="number" step="0.01" name="mts_frente" /></div>
+        <div class="field-group"><label>Metros Fondo</label><input type="number" step="0.01" name="mts_fondo" /></div>
+        <div class="field-group"><label>Precio Excedente Terreno ($)</label><input type="number" name="precio_excedente_terreno" /></div>
+
+        <div class="field-group field-group--wide section-title" style="margin-top:10px">
+          <h3>3. Distribución y Amenidades</h3>
+        </div>
+
+        <div class="field-group"><label># Niveles</label><input type="number" name="niveles" min="1" /></div>
+        <div class="field-group"><label># Recámaras</label><input type="number" name="recamaras" min="1" max="6" /></div>
+        <div class="field-group"><label># Baños</label><input type="number" step="0.5" name="banos" min="1" max="6" placeholder="Ej. 1.5" /></div>
+        <div class="field-group"><label>Huellas Estacionamiento</label><input type="number" name="huellas_estacionamiento" min="1" max="4" /></div>
+        <div class="field-group"><label>Alcoba</label><select name="alcoba"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Walk-in Closet</label><select name="walk_in_closet"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Baño en Rec Ppal</label><select name="bano_rec_ppal"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Terraza / Balcón</label><select name="terraza_balcon"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Estancia TV</label><select name="estancia_tv"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Estudio</label><select name="estudio"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Alacena</label><select name="alacena"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Área Guardado</label><select name="area_guardado"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Cuarto de Lavandería</label><select name="cuarto_lavanderia"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Roof Garden</label><select name="roof_garden"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Cochera Techada</label><select name="cochera_techada"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+
+        <div class="field-group field-group--wide" style="margin-top:20px">
+          <button type="submit" class="btn btn--primary" style="width:100%">Guardar Registro</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB: DASHBOARD  (id coincide con data-target)
+    ══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="dashboard">
+      <div class="panel-header">
+        <h2>Dashboard Comparativo</h2>
+        <p>Compara el mercado filtrando por uno o múltiples desarrolladores.</p>
+      </div>
+
+      <!-- ── Barra de búsqueda + Zonas ──────────────── -->
+      <div class="dash-search-bar">
+        <div class="dash-search-bar__left">
+          <label class="field-label">Comparar Desarrolladores:</label>
+          <div class="dash-search-bar__inputs">
+            <input type="text" id="filtroDesarrollador"
+              placeholder="Ej: Derex, Encasa  (separar con coma)" />
+            <button class="btn btn--primary btn--sm" id="btnFiltrar">Aplicar</button>
+            <button class="btn btn--ghost btn--sm" id="btnLimpiarFiltro">Limpiar</button>
+          </div>
+        </div>
+        <div class="dash-zona-box">
+          <span class="dash-zona-box__label">Zona a la que pertenecen</span>
+          <div id="lblZonas" class="dash-zona-box__value">—</div>
+        </div>
+      </div>
+
+      <!-- ── KPIs ───────────────────────────────────── -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-card__label">Conteo de Registros</span>
+          <div id="kpiTotal" class="kpi-multi">—</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-card__label">Precio Promedio</span>
+          <div id="kpiPromedio" class="kpi-multi">—</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-card__label">M² Construidos (más frecuente)</span>
+          <div id="kpiMetros" class="kpi-multi">—</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-card__label">Estatus</span>
+          <div id="kpiEstatus" class="kpi-multi">—</div>
+        </div>
+      </div>
+
+      <!-- ── Sección de tablas + gráfica ───────────── -->
+      <div class="dash-bottom-grid">
+
+        <!-- Tabla: Desarrollador → Fraccionamientos -->
+        <div class="dash-table-card">
+          <div class="dash-table-card__header">Desarrollador y Fraccionamientos</div>
+          <div class="dash-table-card__body" id="tablaFraccsWrap">
+            <p class="dash-empty">Aplica un filtro para ver los datos.</p>
+          </div>
+        </div>
+
+        <!-- Tabla: Prototipos y Precios -->
+        <div class="dash-table-card">
+          <div class="dash-table-card__header">Prototipos por Fraccionamiento</div>
+          <div class="dash-table-card__body" id="tablaProtosWrap">
+            <p class="dash-empty">Aplica un filtro para ver los datos.</p>
+          </div>
+        </div>
+
+        <!-- Gráfica: Top 10 valor promedio -->
+        <div class="dash-chart-card">
+          <div class="dash-table-card__header">Valor Promedio por Fraccionamiento (Top 10)</div>
+          <div class="dash-chart-card__body">
+            <canvas id="chartFracc"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB: BASE DE DATOS
+    ══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="base-datos">
+      <div class="panel-header">
+        <h2>Base de Datos de Viviendas</h2>
+        <p>Visualiza todos los registros almacenados en PostgreSQL.</p>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tipología</th>
+              <th>Municipio</th>
+              <th>Desarrollador</th>
+              <th>Fraccionamiento</th>
+              <th>Precio Lista</th>
+              <th>Estatus</th>
+            </tr>
+          </thead>
+          <tbody id="tablaRegistros">
+            <tr class="empty-row"><td colspan="7">Cargando registros…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB: IMPORTAR EXCEL
+    ══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="importar">
+      <div class="panel-header">
+        <h2>Importar Excel</h2>
+        <p>Carga masiva de registros desde tu archivo .xlsx existente.</p>
+      </div>
+
+      <div class="import-box">
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone__icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <p class="drop-zone__text">Arrastra tu archivo <strong>.xlsx</strong> aquí</p>
+          <p class="drop-zone__sub">o haz clic para seleccionarlo</p>
+          <input type="file" id="archivoExcel" accept=".xlsx,.xls" class="drop-zone__input" />
+        </div>
+
+        <div class="import-info">
+          <div class="import-info__title">Columnas esperadas en tu Excel:</div>
+          <div class="import-info__cols">
+            <span>tipologia</span><span>municipio</span><span>zona</span>
+            <span>segmento</span><span>subsegmento</span><span>desarrollador</span>
+            <span>fraccionamiento</span><span>prototipo</span><span>estatus</span>
+            <span>precio_lista</span><span>m2_construidos</span><span>m2_habitables</span>
+            <span>m2_terreno</span><span>recamaras</span><span>banos</span>
+          </div>
+          <p class="import-info__note">Los encabezados no son sensibles a mayúsculas. La primera fila debe contener los nombres de columna.</p>
+        </div>
+
+        <div class="import-file hidden" id="importFile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span id="importFileName">archivo.xlsx</span>
+        </div>
+
+        <div class="import-actions" style="margin-top:16px">
+          <button class="btn btn--primary btn--lg" id="btnImportar" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Importar Registros
+          </button>
+        </div>
+
+        <div class="import-result hidden" id="importResult"></div>
+
+        <div class="progress-wrap hidden" id="progressWrap">
+          <div class="progress-bar" id="progressBar"></div>
+          <span class="progress-label" id="progressLabel">Procesando…</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
