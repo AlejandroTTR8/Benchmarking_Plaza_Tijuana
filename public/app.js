@@ -204,59 +204,6 @@ function renderTablaRegistros(registros) {
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════════════════════
-function renderDashboard(registros) {
-  const total    = registros.length;
-  const promedio = total
-    ? registros.reduce((s, r) => s + (parseFloat(r.precio_lista) || 0), 0) / total
-    : 0;
-  const vertical   = registros.filter(r => String(r.tipologia || '').toLowerCase() === 'vertical').length;
-  const horizontal = registros.filter(r => String(r.tipologia || '').toLowerCase() === 'horizontal').length;
-
-  // KPIs
-  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  set('kpiTotal',    total.toLocaleString('es-MX'));
-  set('kpiPromedio', total ? formatPeso(promedio) : '—');
-  set('kpiNueva',    vertical.toLocaleString('es-MX'));
-  set('kpiUsada',    horizontal.toLocaleString('es-MX'));
-
-  if (!total) return; // No graficar si no hay datos
-
-  const paleta = ['#3d7fff','#a855f7','#ec4899','#22c55e','#f59e0b','#14b8a6','#f43f5e'];
-
-  // ─ Gráfica: Municipio ─────────────────────────────
-  const municipioConteo = {};
-  registros.forEach(r => {
-    const m = r.municipio || 'N/D';
-    municipioConteo[m] = (municipioConteo[m] || 0) + 1;
-  });
-
-  if (chartMunicipio) chartMunicipio.destroy();
-  const ctxM = document.getElementById('chartGrupo');
-  if (ctxM) {
-    chartMunicipio = new Chart(ctxM.getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        labels: Object.keys(municipioConteo),
-        datasets: [{
-          data: Object.values(municipioConteo),
-          backgroundColor: paleta,
-          borderColor: '#161b24',
-          borderWidth: 3,
-          hoverOffset: 6,
-        }],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom', labels: { color: '#6b7a99', padding: 12, font: { family: 'IBM Plex Sans', size: 11 } } },
-        },
-      },
-    });
-  }
-
 // ─── Función matemática para obtener el valor que más se repite (Moda) ───
 function calcularModa(arr) {
   if (!arr.length) return null;
@@ -306,7 +253,7 @@ function renderDashboard(registros, isFiltrado = false) {
     regs.forEach(r => { if (r.zona) zonasSet.add(r.zona.toUpperCase()); });
 
     // Diseño de cada línea del KPI
-    const prefix = isFiltrado ? `<span style="color:var(--text-muted); font-size:11px; display:inline-block; width:70px;">${dev}:</span> ` : '';
+    const prefix = isFiltrado ? `<span style="color:var(--text-muted); font-size:11px; display:inline-block; width:80px;">${dev}:</span> ` : '';
     const divisor = 'border-bottom: 1px solid rgba(255,255,255,0.05); padding: 4px 0;';
 
     htmlTotal += `<div style="${divisor}">${prefix}<span style="color:var(--accent); font-weight:bold">${total}</span> registros</div>`;
@@ -316,13 +263,21 @@ function renderDashboard(registros, isFiltrado = false) {
   });
 
   // Imprimir KPIs
-  document.getElementById('kpiTotal').innerHTML = htmlTotal || '—';
-  document.getElementById('kpiPromedio').innerHTML = htmlPromedio || '—';
-  document.getElementById('kpiMetros').innerHTML = htmlMetros || '—';
-  document.getElementById('kpiEstatus').innerHTML = htmlEstatus || '—';
+  const elKpiTotal = document.getElementById('kpiTotal');
+  if(elKpiTotal) elKpiTotal.innerHTML = htmlTotal || '—';
+  
+  const elKpiPromedio = document.getElementById('kpiPromedio');
+  if(elKpiPromedio) elKpiPromedio.innerHTML = htmlPromedio || '—';
+  
+  const elKpiMetros = document.getElementById('kpiMetros');
+  if(elKpiMetros) elKpiMetros.innerHTML = htmlMetros || '—';
+  
+  const elKpiEstatus = document.getElementById('kpiEstatus');
+  if(elKpiEstatus) elKpiEstatus.innerHTML = htmlEstatus || '—';
   
   // Imprimir Zonas
-  document.getElementById('lblZonas').textContent = zonasSet.size > 0 ? Array.from(zonasSet).join(', ') : 'N/D';
+  const elZonas = document.getElementById('lblZonas');
+  if(elZonas) elZonas.textContent = zonasSet.size > 0 ? Array.from(zonasSet).join(', ') : 'N/D';
 
   if (!registros.length) {
     document.getElementById('tablaFraccs').innerHTML = '';
@@ -332,25 +287,25 @@ function renderDashboard(registros, isFiltrado = false) {
   }
 
   // 3. Tabla 1: Desarrollador -> Fraccionamientos -> Recuento de Prototipos
-  let htmlTabla1 = `<thead><tr><th>Desarrollador / Fracc.</th><th style="text-align:center">Recuento Prototipos</th></tr></thead><tbody>`;
+  let htmlTabla1 = `<thead><tr><th style="text-align:left; padding-bottom:8px; color:var(--text-muted);">Desarrollador / Fracc.</th><th style="text-align:center; padding-bottom:8px; color:var(--text-muted);">Recuento Prototipos</th></tr></thead><tbody>`;
   Object.keys(grupos).forEach(dev => {
     const fraccs = {};
     grupos[dev].forEach(r => {
       const f = r.fraccionamiento || 'N/D';
       if (!fraccs[f]) fraccs[f] = new Set();
-      if (r.prototipo) fraccs[f].add(r.prototipo); // Usamos Set para no contar prototipos duplicados
+      if (r.prototipo) fraccs[f].add(r.prototipo);
     });
 
-    htmlTabla1 += `<tr style="background:var(--bg-panel)"><td colspan="2" style="font-weight:bold; color:var(--accent)">${dev}</td></tr>`;
+    htmlTabla1 += `<tr style="background:var(--bg-panel)"><td colspan="2" style="font-weight:bold; color:var(--accent); padding: 8px 5px;">${dev}</td></tr>`;
     Object.keys(fraccs).forEach(f => {
-      htmlTabla1 += `<tr><td style="padding-left: 20px;">${f}</td><td style="text-align:center; font-weight:bold; color:var(--text-primary)">${fraccs[f].size}</td></tr>`;
+      htmlTabla1 += `<tr style="border-bottom:1px solid var(--border)"><td style="padding: 8px 5px 8px 20px;">${f}</td><td style="text-align:center; font-weight:bold; color:var(--text-primary);">${fraccs[f].size}</td></tr>`;
     });
   });
   htmlTabla1 += `</tbody>`;
   document.getElementById('tablaFraccs').innerHTML = htmlTabla1;
 
   // 4. Tabla 2: Fraccionamiento -> Prototipo -> Precio Promedio
-  let htmlTabla2 = `<thead><tr><th>Fraccionamiento</th><th>Prototipo</th><th>Precio Promedio</th></tr></thead><tbody>`;
+  let htmlTabla2 = `<thead><tr><th style="text-align:left; padding-bottom:8px; color:var(--text-muted);">Fraccionamiento</th><th style="text-align:left; padding-bottom:8px; color:var(--text-muted);">Prototipo</th><th style="text-align:left; padding-bottom:8px; color:var(--text-muted);">Precio Promedio</th></tr></thead><tbody>`;
   Object.keys(grupos).forEach(dev => {
     const fraccs = {};
     grupos[dev].forEach(r => {
@@ -362,14 +317,14 @@ function renderDashboard(registros, isFiltrado = false) {
       fraccs[f][p].count++;
     });
 
-    htmlTabla2 += `<tr style="background:var(--bg-panel)"><td colspan="3" style="font-weight:bold; color:var(--accent)">${dev}</td></tr>`;
+    htmlTabla2 += `<tr style="background:var(--bg-panel)"><td colspan="3" style="font-weight:bold; color:var(--accent); padding: 8px 5px;">${dev}</td></tr>`;
     Object.keys(fraccs).forEach(f => {
       Object.keys(fraccs[f]).forEach((p, index) => {
         const avg = fraccs[f][p].suma / fraccs[f][p].count;
-        htmlTabla2 += `<tr>
-          ${index === 0 ? `<td rowspan="${Object.keys(fraccs[f]).length}" style="border-right:1px solid var(--border)">${f}</td>` : ''}
-          <td>${p}</td>
-          <td style="color:var(--accent); font-family:var(--mono)">${formatPeso(avg)}</td>
+        htmlTabla2 += `<tr style="border-bottom:1px solid var(--border)">
+          ${index === 0 ? `<td rowspan="${Object.keys(fraccs[f]).length}" style="border-right:1px solid var(--border); padding: 8px 5px; vertical-align: top;">${f}</td>` : ''}
+          <td style="padding: 8px 5px;">${p}</td>
+          <td style="color:var(--accent); font-family:var(--mono); padding: 8px 5px;">${formatPeso(avg)}</td>
         </tr>`;
       });
     });
@@ -377,7 +332,7 @@ function renderDashboard(registros, isFiltrado = false) {
   htmlTabla2 += `</tbody>`;
   document.getElementById('tablaProtos').innerHTML = htmlTabla2;
 
-  // 5. Gráfica: Top 10 fraccionamientos con colores dinámicos si se comparan desarrolladores
+  // 5. Gráfica: Top 10 fraccionamientos con colores dinámicos
   const fraccMap = {};
   registros.forEach(r => {
     const f = r.fraccionamiento || 'N/D';
@@ -393,7 +348,6 @@ function renderDashboard(registros, isFiltrado = false) {
     .sort((a, b) => b.promedio - a.promedio)
     .slice(0, 10);
 
-  // Asignar colores por desarrollador si estamos comparando
   const paletaMulti = ['#3d7fff', '#a855f7', '#ec4899', '#22c55e', '#f59e0b'];
   const devColors = {};
   let colorIndex = 0;
@@ -414,7 +368,6 @@ function renderDashboard(registros, isFiltrado = false) {
         datasets: [{
           label: 'Precio Promedio',
           data: top10.map(f => f.promedio),
-          // Si filtramos múltiples, usa un color por desarrollador, si no, usa el azul por defecto
           backgroundColor: top10.map(f => isFiltrado ? devColors[f.dev] + 'b3' : 'rgba(61,127,255,.7)'),
           borderColor: top10.map(f => isFiltrado ? devColors[f.dev] : '#3d7fff'),
           borderWidth: 1.5, borderRadius: 4,
@@ -440,9 +393,9 @@ function renderDashboard(registros, isFiltrado = false) {
 
 // ─── Filtro del dashboard (Búsqueda Múltiple) ──────────────────────────────
 function initFiltroDashboard() {
-  const btnFiltrar      = document.getElementById('btnFiltrar');
+  const btnFiltrar       = document.getElementById('btnFiltrar');
   const btnLimpiarFiltro = document.getElementById('btnLimpiarFiltro');
-  const inputFiltro     = document.getElementById('filtroDesarrollador');
+  const inputFiltro      = document.getElementById('filtroDesarrollador');
 
   if (btnFiltrar) {
     btnFiltrar.addEventListener('click', () => {
@@ -452,12 +405,10 @@ function initFiltroDashboard() {
         return;
       }
       
-      // Separar por coma y limpiar espacios para permitir búsquedas múltiples (Ej. "Derex, Ruba")
       const devsBuscados = q.split(',').map(s => s.trim()).filter(s => s);
 
       const filtrados = todosLosRegistros.filter(r => {
         const dev = String(r.desarrollador || '').toLowerCase();
-        // Verifica si el desarrollador del registro coincide con ALGUNO de los que buscamos
         return devsBuscados.some(buscado => dev.includes(buscado));
       });
       
@@ -469,36 +420,6 @@ function initFiltroDashboard() {
     btnLimpiarFiltro.addEventListener('click', () => {
       if (inputFiltro) inputFiltro.value = '';
       renderDashboard(todosLosRegistros, false);
-    });
-  }
-
-  if (inputFiltro) {
-    inputFiltro.addEventListener('keydown', e => {
-      if (e.key === 'Enter') btnFiltrar?.click();
-    });
-  }
-}
-
-// ─── Filtro del dashboard ──────────────────────────────────────────────────
-function initFiltroDashboard() {
-  const btnFiltrar      = document.getElementById('btnFiltrar');
-  const btnLimpiarFiltro = document.getElementById('btnLimpiarFiltro');
-  const inputFiltro     = document.getElementById('filtroFraccionamiento');
-
-  if (btnFiltrar) {
-    btnFiltrar.addEventListener('click', () => {
-      const q = inputFiltro?.value.trim().toLowerCase() || '';
-      const filtrados = q
-        ? todosLosRegistros.filter(r => String(r.fraccionamiento || '').toLowerCase().includes(q))
-        : todosLosRegistros;
-      renderDashboard(filtrados);
-    });
-  }
-
-  if (btnLimpiarFiltro) {
-    btnLimpiarFiltro.addEventListener('click', () => {
-      if (inputFiltro) inputFiltro.value = '';
-      renderDashboard(todosLosRegistros);
     });
   }
 
