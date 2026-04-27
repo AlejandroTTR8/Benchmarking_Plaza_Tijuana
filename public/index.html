@@ -19,11 +19,17 @@
       <span>DataVivienda</span>
     </div>
     <nav class="sidebar__nav">
-      <button class="nav-btn active">
+      <button class="nav-btn" data-target="dashboard">
+        <span>📊 Dashboard</span>
+      </button>
+      <button class="nav-btn active" data-target="captura">
         <span>📝 Captura Manual</span>
       </button>
-      <button class="nav-btn">
+      <button class="nav-btn" data-target="base-datos">
         <span>🗃️ Base de Datos</span>
+      </button>
+      <button class="nav-btn" data-target="importar">
+        <span>📁 Importar Excel</span>
       </button>
     </nav>
     <div class="sidebar__stats">
@@ -198,6 +204,62 @@
         </div>
       </form>
       </div>
+    <div class="tab-panel" id="dashboard">
+      <div class="panel-header">
+        <h2>Dashboard</h2>
+        <p>Resumen de indicadores clave de la base de datos.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-card__label">Viviendas Verticales</span>
+          <span class="kpi-card__value">0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-card__label">Viviendas Horizontales</span>
+          <span class="kpi-card__value">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-panel" id="base-datos">
+      <div class="panel-header">
+        <h2>Base de Datos de Viviendas</h2>
+        <p>Visualiza y gestiona todos los registros almacenados en PostgreSQL.</p>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tipología</th>
+              <th>Municipio</th>
+              <th>Desarrollador</th>
+              <th>Precio Lista</th>
+              <th>Estatus</th>
+            </tr>
+          </thead>
+          <tbody id="tablaRegistros">
+            <tr class="empty-row"><td colspan="6">Cargando registros...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="importar">
+      <div class="panel-header">
+        <h2>Importar Datos Masivos</h2>
+        <p>Sube tu archivo de Excel (.xlsx) para cargar los registros directamente a PostgreSQL.</p>
+      </div>
+      
+      <form id="importarForm" style="text-align: center; padding: 60px; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--bg-card);">
+        <h3 style="margin-bottom: 10px; color: var(--text-primary);">Selecciona tu archivo</h3>
+        <input type="file" id="archivoExcel" accept=".xlsx, .xls" required style="margin-bottom: 20px; color: var(--text-muted);" />
+        <br>
+        <button type="submit" class="btn btn--primary" id="btnImportar">
+          Procesar Archivo
+        </button>
+        <div id="importAlert" class="alert hidden" style="margin-top: 20px; text-align: left;"></div>
+      </form>
+    </div>
   </main>
 
   <script src="/app.js"></script>
