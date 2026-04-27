@@ -1,150 +1,205 @@
-<form id="capturaForm" class="form-grid">
-  <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px;">
-    <h3 style="color: var(--accent);">1. Clasificación y Ubicación</h3>
-  </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataVivienda</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
 
-  <div class="field-group">
-    <label>Tipología</label>
-    <select name="tipologia" required>
-      <option value="">Selecciona...</option>
-      <option value="Vertical">Vertical</option>
-      <option value="Horizontal">Horizontal</option>
-    </select>
-  </div>
-  <div class="field-group">
-    <label>Municipio</label>
-    <select name="municipio" required>
-      <option value="">Selecciona...</option>
-      <option value="Tijuana">Tijuana</option>
-      <option value="Playas de Rosarito">Playas de Rosarito</option>
-      <option value="Tecate">Tecate</option>
-    </select>
-  </div>
-  <div class="field-group">
-    <label>Zona (Delegación)</label>
-    <select name="zona">
-      <option value="">Selecciona...</option>
-      <option value="Centro">Centro</option>
-      <option value="Cerro Colorado">Cerro Colorado</option>
-      <option value="La Mesa">La Mesa</option>
-      <option value="La Presa Abelardo L. Rodríguez">La Presa Abelardo L. Rodríguez</option>
-      <option value="La Presa Este">La Presa Este</option>
-      <option value="Otay Centenario">Otay Centenario</option>
-      <option value="Playas de Tijuana">Playas de Tijuana</option>
-      <option value="San Antonio de los Buenos">San Antonio de los Buenos</option>
-      <option value="Sánchez Taboada">Sánchez Taboada</option>
-    </select>
-  </div>
-  <div class="field-group">
-    <label>Segmento</label>
-    <select name="segmento" required>
-      <option value="">Selecciona...</option>
-      <option value="VIM">VIM</option>
-      <option value="VIS">VIS</option>
-      <option value="VIR">VIR</option>
-    </select>
-  </div>
-  <div class="field-group">
-    <label>Subsegmento</label>
-    <select name="subsegmento">
-      <option value="">Selecciona...</option>
-      <option value="Tradicional">Tradicional</option>
-      <option value="Media Baja">Media Baja</option>
-      <option value="Media Media">Media Media</option>
-      <option value="Media Alta">Media Alta</option>
-      <option value="Residencial">Residencial</option>
-    </select>
-  </div>
-  <div class="field-group">
-    <label>Desarrollador</label>
-    <input type="text" name="desarrollador" placeholder="Ej. Ruba" />
-  </div>
-  <div class="field-group">
-    <label>Fraccionamiento</label>
-    <input type="text" name="fraccionamiento" />
-  </div>
-  <div class="field-group">
-    <label>Prototipo</label>
-    <input type="text" name="prototipo" />
-  </div>
-  <div class="field-group">
-    <label>Estatus</label>
-    <select name="estatus" required>
-      <option value="ACTIVO">ACTIVO</option>
-      <option value="INACTIVO">INACTIVO</option>
-      <option value="PAUSA">PAUSA</option>
-    </select>
-  </div>
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">📊</div>
+      <span>DataVivienda</span>
+    </div>
+    <nav class="sidebar__nav">
+      <button class="nav-btn active">
+        <span>📝 Captura Manual</span>
+      </button>
+      <button class="nav-btn">
+        <span>🗃️ Base de Datos</span>
+      </button>
+    </nav>
+    <div class="sidebar__stats">
+      <div class="stat-mini">
+        <span class="stat-mini__label">Total Registros</span>
+        <span class="stat-mini__value" id="contadorTotal">0</span>
+      </div>
+    </div>
+  </aside>
 
-  <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;">
-    <h3 style="color: var(--accent);">2. Dimensiones y Precios</h3>
-  </div>
+  <main class="main">
+    
+    <header class="topbar">
+      <div class="topbar__title">Módulo de Captura</div>
+      <div class="topbar__date">Sistema Activo</div>
+    </header>
 
-  <div class="field-group">
-    <label>Precio de Lista ($)</label>
-    <input type="number" name="precio_lista" placeholder="Ej. 1500000" />
-  </div>
-  <div class="field-group">
-    <label>M2 Construidos (Totales)</label>
-    <input type="number" step="0.01" name="m2_construidos" />
-  </div>
-  <div class="field-group">
-    <label>M2 Habitables</label>
-    <input type="number" step="0.01" name="m2_habitables" />
-  </div>
-  <div class="field-group">
-    <label>M2 Terreno</label>
-    <input type="number" step="0.01" name="m2_terreno" />
-  </div>
-  <div class="field-group">
-    <label>Metros Frente</label>
-    <input type="number" step="0.01" name="mts_frente" />
-  </div>
-  <div class="field-group">
-    <label>Metros Fondo</label>
-    <input type="number" step="0.01" name="mts_fondo" />
-  </div>
-  <div class="field-group">
-    <label>Precio Excedente Terreno ($)</label>
-    <input type="number" name="precio_excedente_terreno" />
-  </div>
+    <div class="tab-panel active" id="captura">
+      <div class="panel-header">
+        <h2>Nuevo Registro de Vivienda</h2>
+        <p>Llena los datos a continuación para registrar la propiedad en la base de datos.</p>
+      </div>
 
-  <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;">
-    <h3 style="color: var(--accent);">3. Distribución y Amenidades</h3>
-  </div>
+      <form id="capturaForm" class="form-grid">
+        <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px;">
+          <h3 style="color: var(--accent);">1. Clasificación y Ubicación</h3>
+        </div>
 
-  <div class="field-group">
-    <label># Niveles</label>
-    <input type="number" name="niveles" min="1" />
-  </div>
-  <div class="field-group">
-    <label># Recámaras</label>
-    <input type="number" name="recamaras" min="1" max="6" />
-  </div>
-  <div class="field-group">
-    <label># Baños</label>
-    <input type="number" step="0.5" name="banos" min="1" max="6" placeholder="Ej. 1.5" />
-  </div>
-  <div class="field-group">
-    <label>Huellas Estacionamiento</label>
-    <input type="number" name="huellas_estacionamiento" min="1" max="4" />
-  </div>
+        <div class="field-group">
+          <label>Tipología</label>
+          <select name="tipologia" required>
+            <option value="">Selecciona...</option>
+            <option value="Vertical">Vertical</option>
+            <option value="Horizontal">Horizontal</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Municipio</label>
+          <select name="municipio" required>
+            <option value="">Selecciona...</option>
+            <option value="Tijuana">Tijuana</option>
+            <option value="Playas de Rosarito">Playas de Rosarito</option>
+            <option value="Tecate">Tecate</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Zona (Delegación)</label>
+          <select name="zona">
+            <option value="">Selecciona...</option>
+            <option value="Centro">Centro</option>
+            <option value="Cerro Colorado">Cerro Colorado</option>
+            <option value="La Mesa">La Mesa</option>
+            <option value="La Presa Abelardo L. Rodríguez">La Presa Abelardo L. Rodríguez</option>
+            <option value="La Presa Este">La Presa Este</option>
+            <option value="Otay Centenario">Otay Centenario</option>
+            <option value="Playas de Tijuana">Playas de Tijuana</option>
+            <option value="San Antonio de los Buenos">San Antonio de los Buenos</option>
+            <option value="Sánchez Taboada">Sánchez Taboada</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Segmento</label>
+          <select name="segmento" required>
+            <option value="">Selecciona...</option>
+            <option value="VIM">VIM</option>
+            <option value="VIS">VIS</option>
+            <option value="VIR">VIR</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Subsegmento</label>
+          <select name="subsegmento">
+            <option value="">Selecciona...</option>
+            <option value="Tradicional">Tradicional</option>
+            <option value="Media Baja">Media Baja</option>
+            <option value="Media Media">Media Media</option>
+            <option value="Media Alta">Media Alta</option>
+            <option value="Residencial">Residencial</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Desarrollador</label>
+          <input type="text" name="desarrollador" placeholder="Ej. Ruba" />
+        </div>
+        <div class="field-group">
+          <label>Fraccionamiento</label>
+          <input type="text" name="fraccionamiento" />
+        </div>
+        <div class="field-group">
+          <label>Prototipo</label>
+          <input type="text" name="prototipo" />
+        </div>
+        <div class="field-group">
+          <label>Estatus</label>
+          <select name="estatus" required>
+            <option value="ACTIVO">ACTIVO</option>
+            <option value="INACTIVO">INACTIVO</option>
+            <option value="PAUSA">PAUSA</option>
+          </select>
+        </div>
 
-  <div class="field-group"><label>Alcoba</label><select name="alcoba"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Walk-in Closet (Rec Ppal)</label><select name="walk_in_closet"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Baño en Rec Ppal</label><select name="bano_rec_ppal"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Terraza / Balcón</label><select name="terraza_balcon"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Estancia TV</label><select name="estancia_tv"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Estudio</label><select name="estudio"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Alacena</label><select name="alacena"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Área Guardado</label><select name="area_guardado"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Cuarto de Lavandería</label><select name="cuarto_lavanderia"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Roof Garden</label><select name="roof_garden"><option value="false">NO</option><option value="true">SÍ</option></select></div>
-  <div class="field-group"><label>Cochera Techada</label><select name="cochera_techada"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;">
+          <h3 style="color: var(--accent);">2. Dimensiones y Precios</h3>
+        </div>
 
-  <div class="field-group field-group--wide" style="margin-top: 20px;">
-    <button type="submit" class="btn btn--primary" style="width: 100%;">
-      Guardar Registro
-    </button>
-  </div>
-</form>
+        <div class="field-group">
+          <label>Precio de Lista ($)</label>
+          <input type="number" name="precio_lista" placeholder="Ej. 1500000" />
+        </div>
+        <div class="field-group">
+          <label>M2 Construidos (Totales)</label>
+          <input type="number" step="0.01" name="m2_construidos" />
+        </div>
+        <div class="field-group">
+          <label>M2 Habitables</label>
+          <input type="number" step="0.01" name="m2_habitables" />
+        </div>
+        <div class="field-group">
+          <label>M2 Terreno</label>
+          <input type="number" step="0.01" name="m2_terreno" />
+        </div>
+        <div class="field-group">
+          <label>Metros Frente</label>
+          <input type="number" step="0.01" name="mts_frente" />
+        </div>
+        <div class="field-group">
+          <label>Metros Fondo</label>
+          <input type="number" step="0.01" name="mts_fondo" />
+        </div>
+        <div class="field-group">
+          <label>Precio Excedente Terreno ($)</label>
+          <input type="number" name="precio_excedente_terreno" />
+        </div>
+
+        <div class="field-group field-group--wide" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;">
+          <h3 style="color: var(--accent);">3. Distribución y Amenidades</h3>
+        </div>
+
+        <div class="field-group">
+          <label># Niveles</label>
+          <input type="number" name="niveles" min="1" />
+        </div>
+        <div class="field-group">
+          <label># Recámaras</label>
+          <input type="number" name="recamaras" min="1" max="6" />
+        </div>
+        <div class="field-group">
+          <label># Baños</label>
+          <input type="number" step="0.5" name="banos" min="1" max="6" placeholder="Ej. 1.5" />
+        </div>
+        <div class="field-group">
+          <label>Huellas Estacionamiento</label>
+          <input type="number" name="huellas_estacionamiento" min="1" max="4" />
+        </div>
+
+        <div class="field-group"><label>Alcoba</label><select name="alcoba"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Walk-in Closet (Rec Ppal)</label><select name="walk_in_closet"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Baño en Rec Ppal</label><select name="bano_rec_ppal"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Terraza / Balcón</label><select name="terraza_balcon"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Estancia TV</label><select name="estancia_tv"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Estudio</label><select name="estudio"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Alacena</label><select name="alacena"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Área Guardado</label><select name="area_guardado"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Cuarto de Lavandería</label><select name="cuarto_lavanderia"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Roof Garden</label><select name="roof_garden"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+        <div class="field-group"><label>Cochera Techada</label><select name="cochera_techada"><option value="false">NO</option><option value="true">SÍ</option></select></div>
+
+        <div class="field-group field-group--wide" style="margin-top: 20px;">
+          <button type="submit" class="btn btn--primary" style="width: 100%;">
+            Guardar Registro
+          </button>
+        </div>
+      </form>
+      </div>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
