@@ -209,42 +209,43 @@ app.post('/api/importar', upload.single('archivoExcel'), async (req, res) => {
       Object.keys(rawFila).forEach(k => { fila[normKey(k)] = rawFila[k]; });
 
       try {
-        // Mapear columnas del Excel a campos de la DB
-        // Acepta variantes comunes de nombres de columna
+     // Mapear columnas del Excel EXACTAMENTE como las tienes en tu archivo
         const dato = {
-          tipologia:                fila.tipologia,
+          // Si en el Excel se llama "Tipo de Vivienda", el servidor leerá "tipo_de_vivienda"
+          tipologia:                fila.tipo_de_vivienda || fila.tipologia,
           municipio:                fila.municipio,
-          zona:                     fila.zona || fila.delegacion || fila.zona_delegacion,
+          zona:                     fila.grupo || fila.zona, // Toma "Grupo" como Zona
           segmento:                 fila.segmento,
-          subsegmento:              fila.subsegmento,
-          desarrollador:            fila.desarrollador,
+          desarrollador:            fila.empresa_comercial || fila.desarrollador, // Toma "Empresa Comercial"
           fraccionamiento:          fila.fraccionamiento,
+          precio_lista:             fila.valor || fila.precio_lista, // Toma "Valor" como Precio
+          
+          // El resto de los campos se llenarán si existen, si no, se guardarán vacíos
+          subsegmento:              fila.subsegmento,
           prototipo:                fila.prototipo,
-          estatus:                  fila.estatus || 'ACTIVO',
-          precio_lista:             fila.precio_lista || fila.precio || fila.valor,
-          m2_construidos:           fila.m2_construidos || fila.m2construidos,
-          m2_habitables:            fila.m2_habitables  || fila.m2habitables,
-          m2_terreno:               fila.m2_terreno     || fila.m2terreno,
-          mts_frente:               fila.mts_frente     || fila.metros_frente,
-          mts_fondo:                fila.mts_fondo      || fila.metros_fondo,
-          precio_excedente_terreno: fila.precio_excedente_terreno || fila.precio_excedente,
+          estatus:                  'ACTIVO', // Todo el Excel entra como ACTIVO
+          m2_construidos:           fila.m2_construidos,
+          m2_habitables:            fila.m2_habitables,
+          m2_terreno:               fila.m2_terreno,
+          mts_frente:               fila.mts_frente,
+          mts_fondo:                fila.mts_fondo,
+          precio_excedente_terreno: fila.precio_excedente_terreno,
           niveles:                  fila.niveles,
-          recamaras:                fila.recamaras || fila.recamaras_,
-          banos:                    fila.banos || fila.banos_,
-          huellas_estacionamiento:  fila.huellas_estacionamiento || fila.estacionamiento,
+          recamaras:                fila.recamaras,
+          banos:                    fila.banos,
+          huellas_estacionamiento:  fila.huellas_estacionamiento,
           alcoba:                   fila.alcoba,
-          walk_in_closet:           fila.walk_in_closet || fila.walkin_closet,
-          bano_rec_ppal:            fila.bano_rec_ppal  || fila.bano_principal,
-          terraza_balcon:           fila.terraza_balcon || fila.terraza,
+          walk_in_closet:           fila.walk_in_closet,
+          bano_rec_ppal:            fila.bano_rec_ppal,
+          terraza_balcon:           fila.terraza_balcon,
           estancia_tv:              fila.estancia_tv,
           estudio:                  fila.estudio,
           alacena:                  fila.alacena,
           area_guardado:            fila.area_guardado,
-          cuarto_lavanderia:        fila.cuarto_lavanderia || fila.lavanderia,
+          cuarto_lavanderia:        fila.cuarto_lavanderia,
           roof_garden:              fila.roof_garden,
-          cochera_techada:          fila.cochera_techada  || fila.cochera,
+          cochera_techada:          fila.cochera_techada
         };
-
         await insertarCaptura(dato);
         insertados++;
       } catch (rowErr) {
