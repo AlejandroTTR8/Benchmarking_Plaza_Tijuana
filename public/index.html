@@ -113,37 +113,63 @@
 
     <div class="tab-panel" id="dashboard">
       <div class="panel-header">
-        <h2>Dashboard</h2>
-        <p>Visualización y análisis de los registros capturados.</p>
+        <h2>Dashboard Comparativo</h2>
+        <p>Compara el mercado filtrando por uno o múltiples desarrolladores.</p>
       </div>
 
-      <div class="filter-bar">
-        <label for="filtroFraccionamiento">Filtrar por Fraccionamiento:</label>
-        <div class="filter-bar__input">
-          <input type="text" id="filtroFraccionamiento" placeholder="Escribe para filtrar…" />
-          <button class="btn btn--sm" id="btnFiltrar">Aplicar</button>
-          <button class="btn btn--sm btn--ghost" id="btnLimpiarFiltro">Limpiar</button>
+      <div class="filter-bar" style="display: flex; gap: 16px; align-items: flex-end; margin-bottom: 24px;">
+        <div class="filter-bar__input" style="flex: 2;">
+          <label for="filtroDesarrollador" style="display: block; margin-bottom: 5px; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Comparar Desarrolladores:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="filtroDesarrollador" placeholder="Ej. Derex, Ruba, Encasa (separados por coma)" style="flex: 1; padding: 9px 12px; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); border-radius: 6px;" />
+            <button class="btn btn--primary" id="btnFiltrar">Aplicar</button>
+            <button class="btn btn--ghost" id="btnLimpiarFiltro">Limpiar</button>
+          </div>
+        </div>
+        <div class="filter-bar__zona" style="flex: 1; padding: 10px 14px; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border); min-height: 40px; display: flex; flex-direction: column; justify-content: center;">
+          <span style="font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Zona(s) de Influencia:</span>
+          <span id="lblZonas" style="font-size: 13px; font-weight: 600; color: var(--accent); margin-top: 2px;">—</span>
         </div>
       </div>
 
       <div class="kpi-grid" id="kpiGrid">
-        <div class="kpi-card"><span class="kpi-card__label">Total Registros</span><span class="kpi-card__value" id="kpiTotal">—</span></div>
-        <div class="kpi-card"><span class="kpi-card__label">Valor Promedio</span><span class="kpi-card__value" id="kpiPromedio">—</span></div>
-        <div class="kpi-card"><span class="kpi-card__label">Vivienda Vertical</span><span class="kpi-card__value" id="kpiNueva">—</span></div>
-        <div class="kpi-card"><span class="kpi-card__label">Vivienda Horizontal</span><span class="kpi-card__value" id="kpiUsada">—</span></div>
+        <div class="kpi-card">
+           <span class="kpi-card__label">Total Registros</span>
+           <div id="kpiTotal" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
+        </div>
+        <div class="kpi-card">
+           <span class="kpi-card__label">Valor Promedio</span>
+           <div id="kpiPromedio" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
+        </div>
+        <div class="kpi-card">
+           <span class="kpi-card__label">M2 Construidos (Más Frecuente)</span>
+           <div id="kpiMetros" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
+        </div>
+        <div class="kpi-card">
+           <span class="kpi-card__label">Estatus de Inventario</span>
+           <div id="kpiEstatus" style="font-size: 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 5px;">—</div>
+        </div>
       </div>
 
-      <div class="charts-grid">
+      <div class="charts-grid" style="margin-top: 24px;">
         <div class="chart-card">
-          <div class="chart-card__header">Distribución por Municipio</div>
-          <div class="chart-card__body"><canvas id="chartGrupo"></canvas></div>
+          <div class="chart-card__header">Fraccionamientos y Prototipos</div>
+          <div class="chart-card__body" style="height: 280px; padding: 0; overflow: auto; align-items: start;">
+             <table class="data-table" style="width: 100%;">
+                <tbody id="tablaFraccs"></tbody>
+             </table>
+          </div>
         </div>
         <div class="chart-card">
-          <div class="chart-card__header">Tipo de Vivienda</div>
-          <div class="chart-card__body"><canvas id="chartTipo"></canvas></div>
+          <div class="chart-card__header">Precios por Prototipo</div>
+          <div class="chart-card__body" style="height: 280px; padding: 0; overflow: auto; align-items: start;">
+             <table class="data-table" style="width: 100%;">
+                <tbody id="tablaProtos"></tbody>
+             </table>
+          </div>
         </div>
         <div class="chart-card chart-card--wide">
-          <div class="chart-card__header">Valor por Fraccionamiento (Top 10)</div>
+          <div class="chart-card__header">Valor Promedio por Fraccionamiento (Top 10)</div>
           <div class="chart-card__body"><canvas id="chartFracc"></canvas></div>
         </div>
       </div>
