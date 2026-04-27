@@ -46,24 +46,34 @@ app.get('/api/stats/count', async (req, res) => {
   }
 });
 
-// --- RUTA: Guardar un nuevo registro (Captura) ---
+// --- RUTA: Guardar un nuevo registro (Captura Masiva de Campos) ---
 app.post('/api/capturas', async (req, res) => {
   try {
-    const { 
-      tipologia, municipio, segmento, desarrollador, fraccionamiento, 
-      precio_lista, m2_construidos, recamaras, banos, estatus 
-    } = req.body;
+    const data = req.body;
 
     const query = `
       INSERT INTO capturas (
-        tipologia, municipio, segmento, desarrollador, fraccionamiento, 
-        precio_lista, m2_construidos, recamaras, banos, estatus
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
+        tipologia, municipio, segmento, subsegmento, desarrollador, fraccionamiento, 
+        prototipo, zona, precio_lista, m2_construidos, m2_habitables, m2_terreno, 
+        mts_frente, mts_fondo, precio_excedente_terreno, niveles, recamaras, banos, 
+        alcoba, walk_in_closet, bano_rec_ppal, terraza_balcon, estancia_tv, estudio, 
+        alacena, area_guardado, cuarto_lavanderia, roof_garden, huellas_estacionamiento, 
+        cochera_techada, estatus
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, 
+        $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31
+      ) RETURNING *;
     `;
     
     const values = [
-      tipologia, municipio, segmento, desarrollador, fraccionamiento, 
-      precio_lista, m2_construidos, recamaras, banos, estatus
+      data.tipologia, data.municipio, data.segmento, data.subsegmento, 
+      data.desarrollador, data.fraccionamiento, data.prototipo, data.zona, 
+      data.precio_lista, data.m2_construidos, data.m2_habitables, data.m2_terreno, 
+      data.mts_frente, data.mts_fondo, data.precio_excedente_terreno, data.niveles, 
+      data.recamaras, data.banos, data.alcoba, data.walk_in_closet, data.bano_rec_ppal, 
+      data.terraza_balcon, data.estancia_tv, data.estudio, data.alacena, 
+      data.area_guardado, data.cuarto_lavanderia, data.roof_garden, 
+      data.huellas_estacionamiento, data.cochera_techada, data.estatus
     ];
 
     const result = await pool.query(query, values);
@@ -71,7 +81,7 @@ app.post('/api/capturas', async (req, res) => {
 
   } catch (error) {
     console.error('Error en el servidor:', error);
-    res.status(500).json({ error: 'Error interno al guardar los datos' });
+    res.status(500).json({ error: 'Error interno al guardar los datos', detalle: error.message });
   }
 });
 
