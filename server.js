@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
 
-// --- NUEVAS HERRAMIENTAS PARA EXCEL (NUEVO) ---
+// --- HERRAMIENTAS PARA EXCEL ---
 const multer = require('multer');
 const xlsx = require('xlsx');
 // Configurar multer para guardar el Excel en la memoria temporal
@@ -18,7 +18,7 @@ const app = express();
 // Middlewares
 app.use(cors());
 app.use(express.json()); 
-app.use(express.static(path.join(__dirname, 'public'))); // Esto sirve tu index.html y app.js
+app.use(express.static(path.join(__dirname, 'public'))); // Sirve index.html y app.js
 
 // Configuración de conexión a PostgreSQL (Railway)
 const pool = new Pool({
@@ -36,7 +36,7 @@ app.get('/api/status', async (req, res) => {
   }
 });
 
-// --- RUTA: Obtener total de registros para el contador (NUEVO) ---
+// --- RUTA: Obtener total de registros para el contador en tiempo real ---
 app.get('/api/stats/count', async (req, res) => {
   try {
     const result = await pool.query('SELECT COUNT(*) FROM capturas');
@@ -46,7 +46,7 @@ app.get('/api/stats/count', async (req, res) => {
   }
 });
 
-// --- RUTA: Guardar un nuevo registro (Captura Masiva de Campos) ---
+// --- RUTA: Guardar un nuevo registro (Captura con los 31 campos nuevos) ---
 app.post('/api/capturas', async (req, res) => {
   try {
     const data = req.body;
@@ -80,7 +80,7 @@ app.post('/api/capturas', async (req, res) => {
     res.status(201).json({ mensaje: 'Guardado con éxito', data: result.rows[0] });
 
   } catch (error) {
-    console.error('Error en el servidor:', error);
+    console.error('Error en el servidor al guardar captura:', error);
     res.status(500).json({ error: 'Error interno al guardar los datos', detalle: error.message });
   }
 });
@@ -95,7 +95,7 @@ app.get('/api/registros', async (req, res) => {
   }
 });
 
-// --- RUTA: Importar Excel (NUEVO) ---
+// --- RUTA: Importar Excel ---
 app.post('/api/importar', upload.single('archivoExcel'), async (req, res) => {
   try {
     if (!req.file) {
@@ -120,7 +120,8 @@ app.post('/api/importar', upload.single('archivoExcel'), async (req, res) => {
   }
 });
 
+// --- INICIAR SERVIDOR ---
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor activo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor activo en puerto ${PORT}`);
 });
