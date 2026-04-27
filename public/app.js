@@ -1,18 +1,15 @@
-// ─── LÓGICA PARA NAVEGAR ENTRE PESTAÑAS ───
 document.addEventListener('DOMContentLoaded', () => {
+    // Lógica para cambiar de pestañas
     const navButtons = document.querySelectorAll('.nav-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
 
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // 1. Quitar la clase "active" de todos los botones y pantallas
             navButtons.forEach(btn => btn.classList.remove('active'));
             tabPanels.forEach(panel => panel.classList.remove('active'));
 
-            // 2. Agregar la clase "active" al botón que clickeaste
             button.classList.add('active');
-
-            // 3. Buscar la pantalla correspondiente y mostrarla
+            
             const targetId = button.getAttribute('data-target');
             const targetPanel = document.getElementById(targetId);
             if (targetPanel) {
