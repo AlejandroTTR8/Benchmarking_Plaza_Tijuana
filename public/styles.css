@@ -652,3 +652,42 @@ select option { background: var(--bg-card); }
   .filter-bar { flex-direction: column; align-items: flex-start; }
   .filter-bar__input { width: 100%; }
 }
+/* ── CONTENEDOR DE LA TABLA (SCROLL) ── */
+.table-container {
+  /* Define la altura máxima antes de que aparezca el scroll vertical */
+  max-height: 65vh; 
+  /* Habilita el scroll vertical y horizontal automáticamente si se desborda */
+  overflow-y: auto;
+  overflow-x: auto;
+  /* Detalles estéticos para que encaje con tu diseño */
+  border: 1px solid #2a3347; 
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+/* ── ENCABEZADO CONGELADO (STICKY) ── */
+.table-container thead th {
+  position: sticky;
+  top: 0; /* Lo ancla a la parte superior del contenedor */
+  background-color: #161b24; /* El color de fondo oscuro de tu app */
+  z-index: 2; /* Asegura que el texto de las filas pase por debajo */
+  /* Sombra sutil para separar el encabezado de los datos al scrollear */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+}
+
+/* Opcional: Personalizar el diseño de la barra de scroll (Webkit) */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.table-container::-webkit-scrollbar-track {
+  background: #0d1117; 
+  border-radius: 4px;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: #3d7fff; /* El color azul de tus botones */
+  border-radius: 4px;
+}
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #2a66d9;
+}
