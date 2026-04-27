@@ -418,6 +418,29 @@ function initImportacion() {
       if (pb) pb.style.width = '100%';
       if (pl) pl.textContent = 'Completado';
       setTimeout(() => { if (pw) pw.classList.add('hidden'); }, 800);
+      async function importarExcel() {
+    const input = document.getElementById("fileInput");
+
+    if (!input.files.length) {
+        alert("Selecciona un archivo");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", input.files[0]);
+
+    const res = await fetch(`${API}/importar`, {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await res.json();
+
+    alert(`${data.message}\nInsertados: ${data.insertados}\nDuplicados: ${data.duplicados}`);
+
+    // actualizar dashboard y contador
+    cargarDashboard();
+}
 
       // Mostrar resultado
       const resultEl = document.getElementById('importResult');
@@ -471,5 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initFormulario();
   initFiltroDashboard();
   initImportacion();
-  actualizarContador(); // Cargar contador al inicio
+  actualizarContador();// Cargar contador al inicio
+  cargarDashboard();
 });
